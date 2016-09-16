@@ -1,0 +1,31 @@
+From 40720991714314d33ba53cdd623bea8b332ef36d Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Fri, 3 Jun 2016 15:29:19 +0200
+Subject: [PATCH 24/26] mx6sx_pins: Add SION configuration for REF_CLK2
+
+This configuration for the REF_CLK2 pin of the ENET_REF_CLK is needed
+the processor need to loopback the generated clock to the own
+MAC-interface.
+
+Ticket #931
+---
+ arch/arm/include/asm/arch-mx6/mx6sx_pins.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/include/asm/arch-mx6/mx6sx_pins.h b/arch/arm/include/asm/arch-mx6/mx6sx_pins.h
+index 7ac6794..bad3674 100644
+--- a/arch/arm/include/asm/arch-mx6/mx6sx_pins.h
++++ b/arch/arm/include/asm/arch-mx6/mx6sx_pins.h
+@@ -371,7 +371,8 @@ enum {
+ 	MX6SX_PAD_ENET2_RX_CLK__PCIE_CTRL_DEBUG_25               = IOMUX_PAD(0x03E4, 0x009C, 9, 0x0000, 0, 0),
+ 
+ 	MX6SX_PAD_ENET2_TX_CLK__ENET2_TX_CLK                     = IOMUX_PAD(0x03E8, 0x00A0, 0, 0x0000, 0, 0),
+-	MX6SX_PAD_ENET2_TX_CLK__ENET2_REF_CLK2                   = IOMUX_PAD(0x03E8, 0x00A0, 1, 0x076C, 1, 0),
++	/* IOMUX_CONFIG SION is needed to loopback the generated clock to the own logic; it's not needed if you have a extern clock */
++	MX6SX_PAD_ENET2_TX_CLK__ENET2_REF_CLK2                   = IOMUX_PAD(0x03E8, 0x00A0, 1 | IOMUX_CONFIG_SION, 0x076C, 1, 0),
+ 	MX6SX_PAD_ENET2_TX_CLK__I2C3_SDA                         = IOMUX_PAD(0x03E8, 0x00A0, 2, 0x07BC, 1, 0),
+ 	MX6SX_PAD_ENET2_TX_CLK__UART1_CTS_B                      = IOMUX_PAD(0x03E8, 0x00A0, 3, 0x082C, 3, 0),
+ 	MX6SX_PAD_ENET2_TX_CLK__MLB_CLK                          = IOMUX_PAD(0x03E8, 0x00A0, 4, 0x07E8, 1, 0),
+-- 
+1.9.1
+

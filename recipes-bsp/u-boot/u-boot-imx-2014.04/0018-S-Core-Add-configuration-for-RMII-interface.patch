@@ -1,0 +1,49 @@
+From 5997e02db5c84dc14110dec4ffa6745b81dd2beb Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Mon, 8 Feb 2016 11:46:55 +0100
+Subject: [PATCH 18/19] S Core: Add configuration for RMII interface
+
+Add configuration of the RMII (100Mbit/s) interface on the RMII 2
+interface of the SoC. These will be enabled by defining
+CONFIG_SCORE_NETWORK, which is not defined by now. So there is the
+possibility but by default networking is disabled.
+
+Ticket #931
+---
+ include/configs/mx6sxscore.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/include/configs/mx6sxscore.h b/include/configs/mx6sxscore.h
+index cb0ef23..30fb45d 100644
+--- a/include/configs/mx6sxscore.h
++++ b/include/configs/mx6sxscore.h
+@@ -69,6 +69,26 @@
+ #undef CONFIG_BOOTM_PLAN9
+ #undef CONFIG_BOOTM_RTEMS
+ 
++#ifdef CONFIG_SCORE_NETWORK
++/* Network configs */
++#define CONFIG_CMD_PING
++#define CONFIG_CMD_DHCP
++#define CONFIG_CMD_MII
++#define CONFIG_CMD_NET
++#define CONFIG_FEC_MXC
++#define CONFIG_MII
++
++#define IMX_FEC_BASE			        ENET2_BASE_ADDR
++#define CONFIG_FEC_MXC_PHYADDR          1
++#define CONFIG_FEC_XCV_TYPE             RMII
++#define CONFIG_ETHPRIME                 "FEC"
++
++#define CONFIG_PHYLIB
++#define CONFIG_PHY_SMSC
++#define CONFIG_FEC_DMA_MINALIGN		64
++//#define CONFIG_FEC_MXC_25M_REF_CLK
++#endif
++
+ #undef CONFIG_CMD_EXPORTENV
+ #undef CONFIG_CMD_IMPORTENV
+ 
+-- 
+1.9.1
+

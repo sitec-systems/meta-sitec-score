@@ -1,0 +1,130 @@
+From d43e34cd11c863f09f53a02bd2c10893c4dcbcc3 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 17 Dec 2015 14:51:36 +0100
+Subject: [PATCH 7/7] S Core: Add support for NAND and SPI-NOR-Flash
+
+The current loaded enviroment for u-boot was changed to be able to load
+kernel and device tree from an NAND Flash. Although the right
+bootparameters will be given to the kernel at boot up.
+
+Ticket #845
+
+The support for SPI-NOR flashes from Micron and Winbound are although
+added to the configuration for the S Core. The compilation of the
+commands and the interface settings for the SPI interface are although
+added.
+
+Ticket #871
+---
+ include/configs/mx6sxscore.h | 38 ++++++++++++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/include/configs/mx6sxscore.h b/include/configs/mx6sxscore.h
+index 093c1aa..c6c07dd 100644
+--- a/include/configs/mx6sxscore.h
++++ b/include/configs/mx6sxscore.h
+@@ -82,8 +82,8 @@
+ #define CONFIG_SYS_I2C_SPEED		100000
+ 
+ /* PMIC */
+-//#define CONFIG_PFUZE100_PMIC_I2C
+-#undef CONFIG_LDO_BYPASS_CHECK
++#define CONFIG_PFUZE100_PMIC_I2C
++//#undef CONFIG_LDO_BYPASS_CHECK
+ #ifdef CONFIG_PFUZE100_PMIC_I2C
+ #define CONFIG_PMIC_I2C_BUS		0
+ #define CONFIG_PMIC_I2C_SLAVE		0x8
+@@ -99,7 +99,6 @@
+ #define CONFIG_BOOTDELAY		2
+ 
+ #define CONFIG_LOADADDR			0x80800000
+-//#define CONFIG_SYS_TEXT_BASE		0x86800000
+ #define CONFIG_SYS_TEXT_BASE		0x87800000
+ 
+ #define CONFIG_SYS_AUXCORE_BOOTDATA 0x78000000 /* Set to QSPI2 B flash at default */
+@@ -112,6 +111,8 @@
+ #define CONFIG_SYS_MMC_ENV_PART		2	/* user area */
+ #define CONFIG_MMCROOT			"/dev/mmcblk2p2"  /* USDHC3 */
+ 
++#define CONFIG_SYS_USE_SPINOR
++
+ #ifdef CONFIG_CMD_BOOTAUX
+ #define UPDATE_M4_ENV \
+     "m4image=m4_qspi.bin\0" \
+@@ -150,9 +151,9 @@
+     "console=ttymxc0\0" \
+     "bootargs=console=ttymxc0,115200 ubi.mtd=5 "  \
+     "root=ubi0:rootfs rootfstype=ubifs "		     \
+-    "mtdparts=gpmi-nand:64m(boot),16m(kernel),16m(dtb),-(rootfs)\0"\
+-    "bootcmd=nand read ${loadaddr} 0x4000000 0x800000;"\
+-    "nand read ${fdt_addr} 0x5000000 0x100000;"\
++    "mtdparts=gpmi-nand:8m(boot),8m(kernel),8m(kernel_backup),2m(dtb),2m(dinfo),-(rootfs)\0"\
++    "bootcmd=nand read ${loadaddr} 0x200000 0x800000;"\
++    "nand read ${fdt_addr} 0x1200000 0x100000;"\
+ "   bootz ${loadaddr} - ${fdt_addr}\0"
+ #else
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+@@ -163,21 +164,25 @@
+     "console=ttymxc0\0" \
+     "fdt_high=0xffffffff\0" \
+     "initrd_high=0xffffffff\0" \
+-    "fdt_file=imx6sx-s2.dtb\0" \
++    "fdt_file=imx6sx-score.dtb\0" \
+     "fdt_addr=0x83000000\0" \
+     "boot_fdt=try\0" \
+ 	"mmcdev=0\0" \
+     "mmcpart=1\0" \
+     "mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
+     "mmcautodetect=yes\0" \
++    "readkernel=nand read ${loadaddr} 0x800000 0x800000\0" \
++    "readfdt=nand read ${fdt_addr} 0x1800000 0x100000\0" \
++    "bootnand=run readfdt; run readkernel; run mmcargs; bootm ${loadaddr} - ${fdt_addr}\0" \
+     "mmcargs=setenv bootargs console=${console},${baudrate} " \
+-        "uart_from_osc root=${mmcroot}\0" \
++        "uart_from_osc ubi.mtd=5 root=${mmcroot} mtdparts=gpmi-nand:8m(boot),8m(kernel),8m(kernel_backup),2m(dtb),2m(dinfo),-(rootfs)\0" \
+     "loadbootscript=" \
+         "fatload mmc 0:${mmcpart} ${loadaddr} ${script};\0" \
+     "bootscript=echo Running bootscript from mmc ...; " \
+         "source\0" \
+     "loadimage=fatload mmc 0:${mmcpart} ${loadaddr} ${image}\0" \
+     "loadfdt=fatload mmc 0:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
++    "nandroot=ubi0:rootfs rootfstype=ubifs\0" \
+     "mmcboot=echo Booting from mmc ...; " \
+     "run mmcargs; " \
+     "if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
+@@ -255,15 +260,32 @@
+ #elif defined CONFIG_SYS_BOOT_NAND
+ #define CONFIG_SYS_USE_NAND
+ #define CONFIG_ENV_IS_IN_NAND
++#elif defined CONFIG_SYS_BOOT_SPINOR
++#define CONFIG_SYS_USE_SPINOR
++#define CONFIG_ENV_IS_IN_SPI_FLASH
+ #else
+ #define CONFIG_SYS_USE_NAND
+ #define CONFIG_ENV_IS_IN_MMC
+ #endif
+ 
++#ifdef CONFIG_SYS_USE_SPINOR
++#define CONFIG_CMD_SF
++#define CONFIG_SPI_FLASH
++#define CONFIG_SPI_FLASH_WINBOND
++#define CONFIG_SPI_FLASH_STMICRO
++#define CONFIG_MXC_SPI
++#define CONFIG_SF_DEFAULT_BUS   2
++#define CONFIG_SF_DEFAULT_SPEED 20000000
++#define CONFIG_SF_DEFAULT_MODE (SPI_MODE_0)
++#define CONFIG_SF_DEFAULT_CS   (2|(IMX_GPIO_NR(6, 12)<<8))
++#endif
++
+ // NAND stuff
+ //#ifdef CONFIG_SYS_USE_NAND
+ #define CONFIG_CMD_NAND
+ #define CONFIG_CMD_NAND_TRIMFFS
++#define CONFIG_CMD_MTDPARTS
++#define CONFIG_CMD_EXT2
+ #define CONFIG_NAND_MXS
+ #define CONFIG_SYS_MAX_NAND_DEVICE 1
+ #define CONFIG_SYS_NAND_BASE		MXS_GPMI_BASE
+-- 
+1.9.1
+

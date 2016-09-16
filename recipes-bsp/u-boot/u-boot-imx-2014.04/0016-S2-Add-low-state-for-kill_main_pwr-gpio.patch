@@ -1,0 +1,37 @@
+From f6edb7b077242cdc22be8f0d8c3b288fe058bf8c Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 4 Feb 2016 11:26:19 +0100
+Subject: [PATCH] S2: Add low state for kill_main_pwr gpio
+
+The kill_main_pwr gpio (GPIO 3, 11) will be setted to low during the
+initialisation of the u-boot. This is needed to have a defined state on
+this gpio. If it's not the board could boot around.
+
+Ticket #926
+---
+ board/freescale/mx6sxscore/mx6sxscore.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/board/freescale/mx6sxscore/mx6sxscore.c b/board/freescale/mx6sxscore/mx6sxscore.c
+index d1fe89d..d6833d6 100644
+--- a/board/freescale/mx6sxscore/mx6sxscore.c
++++ b/board/freescale/mx6sxscore/mx6sxscore.c
+@@ -318,6 +318,7 @@ static iomux_v3_cfg_t const gpio_pads[] = {
+     MX6SX_PAD_GPIO1_IO08__GPIO1_IO_8 | MUX_PAD_CTRL(NO_PAD_CTRL), // CAN Terminate
+     MX6SX_PAD_GPIO1_IO02__GPIO1_IO_2 | MUX_PAD_CTRL(NO_PAD_CTRL), // CAN Standby
+     MX6SX_PAD_KEY_COL2__GPIO2_IO_12 | MUX_PAD_CTRL(NO_PAD_CTRL), // 5PE
++    MX6SX_PAD_LCD1_DATA10__GPIO3_IO_11 | MUX_PAD_CTRL(NO_PAD_CTRL), // KILL_MAIN_PWR
+ #endif // CONFIG_SITEC_S2
+ };
+ 
+@@ -331,6 +332,7 @@ static void setup_gpio(void)
+     gpio_direction_output(IMX_GPIO_NR(1, 8), 1);
+     gpio_direction_output(IMX_GPIO_NR(1, 2), 0);
+     gpio_direction_output(IMX_GPIO_NR(2, 12), 1);
++    gpio_direction_output(IMX_GPIO_NR(3, 11), 0);
+ #endif // CONFIG_SITEC_S2
+ }
+ 
+-- 
+1.9.1
+

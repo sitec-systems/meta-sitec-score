@@ -1,0 +1,63 @@
+From 21c006c53119e8068c8d746b8bcf6dd6c830f002 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Wed, 3 Feb 2016 08:36:07 +0100
+Subject: [PATCH 14/14] FlexCAN: Replace usleep_range with udelay
+
+Replace all usleep_range calls with udelay calls. The usleep_range
+triggers an bug, if an restart time is setted
+---
+ drivers/net/can/flexcan.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 0647af8..7a7c842 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -340,7 +340,7 @@ static int flexcan_chip_enable(struct flexcan_priv *priv)
+ 	flexcan_write(reg, &regs->mcr);
+ 
+ 	while (timeout-- && (flexcan_read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+-		usleep_range(10, 20);
++		udelay(10);
+ 
+ 	if (flexcan_read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK)
+ 		return -ETIMEDOUT;
+@@ -359,7 +359,7 @@ static int flexcan_chip_disable(struct flexcan_priv *priv)
+ 	flexcan_write(reg, &regs->mcr);
+ 
+ 	while (timeout-- && !(flexcan_read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+-		usleep_range(10, 20);
++		udelay(10);
+ 
+ 	if (!(flexcan_read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+ 		return -ETIMEDOUT;
+@@ -378,7 +378,7 @@ static int flexcan_chip_freeze(struct flexcan_priv *priv)
+ 	flexcan_write(reg, &regs->mcr);
+ 
+ 	while (timeout-- && !(flexcan_read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
+-		usleep_range(100, 200);
++		udelay(100);
+ 
+ 	if (!(flexcan_read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
+ 		return -ETIMEDOUT;
+@@ -397,7 +397,7 @@ static int flexcan_chip_unfreeze(struct flexcan_priv *priv)
+ 	flexcan_write(reg, &regs->mcr);
+ 
+ 	while (timeout-- && (flexcan_read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
+-		usleep_range(10, 20);
++		udelay(10);
+ 
+ 	if (flexcan_read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK)
+ 		return -ETIMEDOUT;
+@@ -412,7 +412,7 @@ static int flexcan_chip_softreset(struct flexcan_priv *priv)
+ 
+ 	flexcan_write(FLEXCAN_MCR_SOFTRST, &regs->mcr);
+ 	while (timeout-- && (flexcan_read(&regs->mcr) & FLEXCAN_MCR_SOFTRST))
+-		usleep_range(10, 20);
++		udelay(10);
+ 
+ 	if (flexcan_read(&regs->mcr) & FLEXCAN_MCR_SOFTRST)
+ 		return -ETIMEDOUT;
+-- 
+1.9.1
+

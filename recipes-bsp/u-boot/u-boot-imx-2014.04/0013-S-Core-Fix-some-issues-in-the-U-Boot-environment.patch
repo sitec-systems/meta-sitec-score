@@ -1,0 +1,81 @@
+From ec6fa236327dd1e77b48789a31db7b615ba8f23a Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 28 Jan 2016 09:17:22 +0100
+Subject: [PATCH 13/13] S Core: Fix some issues in the U-Boot environment
+
+Rework the memory layout of the nand flash. There are now 5 partions.
+The U-Boot environment is stored on the first Partition of the NAND
+flash if the u-boot is compiled for the boot from spi-nor. If not than
+u-boot stores it's environment on the sd card. The new layout induced
+the recalculation of the kernel and dt load addresses.
+
+The Bootdelay is settet to one
+Ticket #845
+---
+ include/configs/mx6sxscore.h | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
+
+diff --git a/include/configs/mx6sxscore.h b/include/configs/mx6sxscore.h
+index 932c534..cb0ef23 100644
+--- a/include/configs/mx6sxscore.h
++++ b/include/configs/mx6sxscore.h
+@@ -97,7 +97,7 @@
+ #undef CONFIG_CMD_FPGA
+ #undef CONFIG_CMD_IMLS
+ 
+-#define CONFIG_BOOTDELAY		2
++#define CONFIG_BOOTDELAY		1
+ 
+ #define CONFIG_LOADADDR			0x80800000
+ #define CONFIG_SYS_TEXT_BASE		0x87800000
+@@ -148,16 +148,15 @@
+     "console=ttymxc0\0" \
+     "image=uImage\0" \
+     "fdt_file=imx6sx-score.dtb\0" \
+-    "mtdparts=gpmi-nand:8m(kernel),8m(kernel_backup),2m(dtb),2m(dinfo),-(rootfs)\0"
++    "mtdparts=gpmi-nand:512k(ubootenv),8m(kernel),2m(dtb),8m(kernel_backup),2m(dinfo),-(rootfs)\0" \
++    "update_nor=fatload mmc 1:1 ${loadaddr} u-boot.imx && sf probe && sf erase 0x0 0x60000 && sf write ${loadaddr} 0x400 0x60000\0"
+ 
+ #define CONFIG_BOOT_KERNEL_ROOTFS_NAND \
+     "rootnand=ubi0:rootfs rootfstype=ubifs\0"\
+-    "nandkernel=nand read ${loadaddr} 0x0 0x800000\0" \
+-    "nandfdt=nand read ${fdt_addr} 0x1000000 0x100000\0" \
+-    "nandargs=setenv bootarts " \
+-        "console=${console},${baudrate} "\
+-        "uart_from_osc ubi.mtd=4 root=${rootnand} "\
+-        "mtdparts=gpmi-nand:8m(kernel),8m(kernel_backup),2m(dtb),2m(dinfo),-(rootfs)\0" \
++    "nandkernel=nand read ${loadaddr} 0x80000 0x800000\0" \
++    "nandfdt=nand read ${fdt_addr} 0x880000 0x100000\0" \
++    "nandargs=setenv bootargs " \
++        "console=${console},${baudrate} uart_from_osc ubi.mtd=5 root=${rootnand} mtdparts=${mtdparts}\0" \
+     "bootnand=run nandargs && " \
+         "run nandfdt && " \
+         "run nandkernel && " \
+@@ -232,7 +231,7 @@
+ 
+ #if defined CONFIG_SYS_BOOT_SPINOR
+ #define CONFIG_SYS_USE_SPINOR
+-#define CONFIG_ENV_IS_IN_SPI_FLASH
++#define CONFIG_ENV_IS_IN_NAND
+ #else
+ #define CONFIG_ENV_IS_IN_MMC
+ #endif
+@@ -264,13 +263,8 @@
+ 
+ #if defined(CONFIG_ENV_IS_IN_MMC)
+ #define CONFIG_ENV_OFFSET		(8 * SZ_64K)
+-#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
+-#define CONFIG_ENV_OFFSET		(768 * 1024)
+-#define CONFIG_ENV_SECT_SIZE		(64 * 1024)
+-#define CONFIG_ENV_SPI_BUS		CONFIG_SF_DEFAULT_BUS
+-#define CONFIG_ENV_SPI_CS		CONFIG_SF_DEFAULT_CS
+-#define CONFIG_ENV_SPI_MODE		CONFIG_SF_DEFAULT_MODE
+-#define CONFIG_ENV_SPI_MAX_HZ		CONFIG_SF_DEFAULT_SPEED
++#elif defined(CONFIG_ENV_IS_IN_NAND)
++#define CONFIG_ENV_OFFSET	    0
+ #endif
+ 
+ 
+-- 
+1.9.1
+

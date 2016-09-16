@@ -1,0 +1,96 @@
+From 77975aba5dd88bc2d78d1efc7c26ae0c652bbfa6 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 7 Jan 2016 11:49:32 +0100
+Subject: [PATCH 9/9] S Core: Add CAN gpio initialisation at startup
+
+The CAN control gpios will be initialized and exported on startup. That
+means, they are availible over sysfs at start. The following standard
+settings will be applied:
+- CAN tranceivers are in normal mode
+- CAN termination is deactivated
+
+Ticket #880
+---
+ arch/arm/mach-imx/mach-imx6sx.c | 42 +++++++++++++++++++++++++++--------------
+ 1 file changed, 28 insertions(+), 14 deletions(-)
+
+diff --git a/arch/arm/mach-imx/mach-imx6sx.c b/arch/arm/mach-imx/mach-imx6sx.c
+index 1e39171..12e609d 100755
+--- a/arch/arm/mach-imx/mach-imx6sx.c
++++ b/arch/arm/mach-imx/mach-imx6sx.c
+@@ -310,16 +310,6 @@ static struct platform_device imx6sx_cpufreq_pdev = {
+ 	.name = "imx6q-cpufreq",
+ };
+ 
+-#define GSM_IGN IMX_GPIO_NR(3, 15)
+-#define GSM_RES IMX_GPIO_NR(1, 9)
+-#define EN_5P IMX_GPIO_NR(2, 12)
+-#define CAN_STB IMX_GPIO_NR(1, 2)
+-#define CAN_TERM IMX_GPIO_NR(1, 8)
+-#define GNSS_RES IMX_GPIO_NR(3, 1)
+-#define GNSS_PWR_E IMX_GPIO_NR(3, 9)
+-#define GNSS_ANT_SEL IMX_GPIO_NR(3, 27)
+-#define GSM_ANT_SEL IMX_GPIO_NR(3, 25)
+-
+ static void gpio_request_export(int gpio_num, int def_mode, char *label)
+ {
+ 	int err;
+@@ -335,12 +325,22 @@ static void gpio_request_export(int gpio_num, int def_mode, char *label)
+ 	return;
+ }
+ 
+-static void imx6sx_gpio_setup(void)
++#define GSM_IGN IMX_GPIO_NR(3, 15)
++#define GSM_RES IMX_GPIO_NR(1, 9)
++#define EN_5P IMX_GPIO_NR(2, 12)
++#define CAN_STB IMX_GPIO_NR(1, 2)
++#define CAN_TERM IMX_GPIO_NR(1, 8)
++#define GNSS_RES IMX_GPIO_NR(3, 1)
++#define GNSS_PWR_E IMX_GPIO_NR(3, 9)
++#define GNSS_ANT_SEL IMX_GPIO_NR(3, 27)
++#define GSM_ANT_SEL IMX_GPIO_NR(3, 25)
++
++static void imx6sx_gpio_setup_s2(void)
+ {
+     gpio_request_export(GSM_IGN, GPIOF_OUT_INIT_LOW, "gsm_ign");
+     gpio_request_export(GSM_RES, GPIOF_OUT_INIT_HIGH, "gsm_res");
+-    gpio_request_export(EN_5P, GPIOF_OUT_INIT_LOW, "5p_en");
+-    gpio_request_export(CAN_STB, GPIOF_OUT_INIT_HIGH, "can_stb");
++    gpio_request_export(EN_5P, GPIOF_OUT_INIT_HIGH, "5p_en");
++    gpio_request_export(CAN_STB, GPIOF_OUT_INIT_LOW, "can_stb");
+     gpio_request_export(CAN_TERM, GPIOF_OUT_INIT_LOW, "can_term");
+     gpio_request_export(GNSS_RES, GPIOF_OUT_INIT_LOW, "gnss_res");
+     gpio_request_export(GNSS_PWR_E, GPIOF_OUT_INIT_HIGH, "gnss_pwr_e");
+@@ -349,6 +349,18 @@ static void imx6sx_gpio_setup(void)
+     return;
+ }
+ 
++#define SCORE_CAN1_EN IMX_GPIO_NR(2, 19)
++#define SCORE_CAN1_TERM IMX_GPIO_NR(3, 22)
++#define SCORE_CAN2_EN IMX_GPIO_NR(2, 14)
++#define SCORE_CAN2_TERM IMX_GPIO_NR(1, 8)
++static void imx6sx_gpio_setup_score(void)
++{
++    gpio_request_export(SCORE_CAN1_EN, GPIOF_OUT_INIT_HIGH, "can1_en");
++    gpio_request_export(SCORE_CAN1_TERM, GPIOF_OUT_INIT_LOW, "can1_term");
++    gpio_request_export(SCORE_CAN2_EN, GPIOF_OUT_INIT_HIGH, "can2_en");
++    gpio_request_export(SCORE_CAN2_TERM, GPIOF_OUT_INIT_LOW, "can2_term");
++}
++
+ static void __init imx6sx_init_late(void)
+ {
+ 	if (IS_ENABLED(CONFIG_ARM_IMX6Q_CPUFREQ)) {
+@@ -361,7 +373,9 @@ static void __init imx6sx_init_late(void)
+ 		imx6sx_arm2_flexcan_fixup();
+ 
+     if (of_machine_is_compatible("fsl,imx6sx-s2"))
+-        imx6sx_gpio_setup();
++        imx6sx_gpio_setup_s2();
++    else if (of_machine_is_compatible("fsl,imx6sx-score"))
++        imx6sx_gpio_setup_score();
+ 
+ 	imx6sx_cpuidle_init();
+ }
+-- 
+1.9.1
+

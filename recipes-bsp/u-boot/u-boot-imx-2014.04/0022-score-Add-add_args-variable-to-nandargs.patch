@@ -1,0 +1,39 @@
+From a50a3bcc80628e7c135cd67e1742043f67cf5bd8 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Tue, 8 Mar 2016 16:16:28 +0100
+Subject: [PATCH] score: Add add_args variable to nandargs
+
+Add the add_args (additional arguments) to the nandargs variable in the
+default u-boot environment. This makes it possible to eays add
+additional kernel parameters to the call. You can modify the variable
+without modifing the complete nandargs line.
+
+Ticket #1019
+---
+ include/configs/mx6sxscore.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/mx6sxscore.h b/include/configs/mx6sxscore.h
+index 1871918..5fda3b3 100644
+--- a/include/configs/mx6sxscore.h
++++ b/include/configs/mx6sxscore.h
+@@ -168,6 +168,7 @@
+     "console=ttymxc0\0" \
+     "image=uImage\0" \
+     "fdt_file=imx6sx-score.dtb\0" \
++    "add_args=\0" \
+     "mtdparts=gpmi-nand:512k(ubootenv),8m(kernel),2m(dtb),8m(kernel_backup),2m(dinfo),-(rootfs)\0" \
+     "update_nor=fatload mmc 1:1 ${loadaddr} u-boot.imx && sf probe && sf erase 0x0 0x60000 && sf write ${loadaddr} 0x400 0x60000\0"
+ 
+@@ -178,7 +179,7 @@
+     "nandkernel=nand read ${loadaddr} 0x80000 0x800000\0" \
+     "nandfdt=nand read ${fdt_addr} 0x880000 0x100000\0" \
+     "nandargs=setenv bootargs " \
+-        "console=${console},${baudrate} panic=2 uart_from_osc ubi.mtd=5 root=${rootnand} mtdparts=${mtdparts}\0" \
++        " console=${console},${baudrate} panic=2 uart_from_osc ubi.mtd=5 root=${rootnand} mtdparts=${mtdparts} ${add_args}\0" \
+     "bootnand=run getrootname && " \
+         "run setrootnand && " \
+         "run nandargs && " \
+-- 
+1.9.1
+

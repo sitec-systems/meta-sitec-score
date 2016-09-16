@@ -1,0 +1,30 @@
+From 50dbc553f0f94c849588d7b6d5f90e7a80c6aced Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Sat, 2 Apr 2016 09:24:07 +0200
+Subject: [PATCH] mach-imx6sx: Change the states of UART6 RTS and CTS
+
+It's necessary to change the states of RTS and CTS for the new Hardware.
+
+Ticket #1083
+---
+ arch/arm/mach-imx/mach-imx6sx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-imx/mach-imx6sx.c b/arch/arm/mach-imx/mach-imx6sx.c
+index 3f85127..9ff1bdb 100755
+--- a/arch/arm/mach-imx/mach-imx6sx.c
++++ b/arch/arm/mach-imx/mach-imx6sx.c
+@@ -348,8 +348,8 @@ static void imx6sx_gpio_setup_s2(void)
+     gpio_request_export(GNSS_PWR_E, GPIOF_OUT_INIT_HIGH, "gnss_pwr_e");
+     gpio_request_export(GNSS_ANT_SEL, GPIOF_OUT_INIT_HIGH, "gnss_ant_sel");
+     gpio_request_export(GSM_ANT_SEL, GPIOF_OUT_INIT_HIGH, "gsm_ant_sel");
+-	gpio_request_export(UART6_CTS, GPIOF_IN, "uart6_cts");
+-	gpio_request_export(UART6_RTS, GPIOF_OUT_INIT_LOW, "uart6_rts");
++	gpio_request_export(UART6_RTS, GPIOF_IN, "uart6_cts");
++	gpio_request_export(UART6_CTS, GPIOF_OUT_INIT_LOW, "uart6_rts");
+     return;
+ }
+ 
+-- 
+1.9.1
+

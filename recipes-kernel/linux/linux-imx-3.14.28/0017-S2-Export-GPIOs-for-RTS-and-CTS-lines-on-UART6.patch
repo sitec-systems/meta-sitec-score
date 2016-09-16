@@ -1,0 +1,38 @@
+From 3349093e3db78e2a5bd620602839e53399f2c3f8 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 11 Feb 2016 11:35:52 +0100
+Subject: [PATCH 17/17] S2: Export GPIOs for RTS and CTS lines on UART6
+
+Export the GPIOs for the RTS and CTS lines on the UART6. The CTS is an
+input and the RTS is an output which will be initialized with 0.
+
+Ticket #938
+---
+ arch/arm/mach-imx/mach-imx6sx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm/mach-imx/mach-imx6sx.c b/arch/arm/mach-imx/mach-imx6sx.c
+index 630949d..3f85127 100755
+--- a/arch/arm/mach-imx/mach-imx6sx.c
++++ b/arch/arm/mach-imx/mach-imx6sx.c
+@@ -334,6 +334,8 @@ static void gpio_request_export(int gpio_num, int def_mode, char *label)
+ #define GNSS_PWR_E IMX_GPIO_NR(3, 9)
+ #define GNSS_ANT_SEL IMX_GPIO_NR(3, 27)
+ #define GSM_ANT_SEL IMX_GPIO_NR(3, 25)
++#define UART6_CTS IMX_GPIO_NR(2, 15)
++#define UART6_RTS IMX_GPIO_NR(2, 10)
+ 
+ static void imx6sx_gpio_setup_s2(void)
+ {
+@@ -346,6 +348,8 @@ static void imx6sx_gpio_setup_s2(void)
+     gpio_request_export(GNSS_PWR_E, GPIOF_OUT_INIT_HIGH, "gnss_pwr_e");
+     gpio_request_export(GNSS_ANT_SEL, GPIOF_OUT_INIT_HIGH, "gnss_ant_sel");
+     gpio_request_export(GSM_ANT_SEL, GPIOF_OUT_INIT_HIGH, "gsm_ant_sel");
++	gpio_request_export(UART6_CTS, GPIOF_IN, "uart6_cts");
++	gpio_request_export(UART6_RTS, GPIOF_OUT_INIT_LOW, "uart6_rts");
+     return;
+ }
+ 
+-- 
+1.9.1
+

@@ -1,0 +1,60 @@
+From fe5679eb2d9a517cbe8b41a369ec148403414b87 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Wed, 3 Feb 2016 08:53:59 +0100
+Subject: [PATCH 14/15] S2: Add defined state for some gpios
+
+Add a defined state for important gpios on the S2 board. These are
+important pins which need a defined state from the beginning
+
+Ticket #910
+---
+ board/freescale/mx6sxscore/mx6sxscore.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/board/freescale/mx6sxscore/mx6sxscore.c b/board/freescale/mx6sxscore/mx6sxscore.c
+index 6dbc43d..d1fe89d 100644
+--- a/board/freescale/mx6sxscore/mx6sxscore.c
++++ b/board/freescale/mx6sxscore/mx6sxscore.c
+@@ -313,7 +313,12 @@ void setup_spinor(void)
+ static iomux_v3_cfg_t const gpio_pads[] = {
+     MX6SX_PAD_LCD1_DATA18__GPIO3_IO_19 | MUX_PAD_CTRL(NO_PAD_CTRL),
+     MX6SX_PAD_LCD1_DATA19__GPIO3_IO_20 | MUX_PAD_CTRL(NO_PAD_CTRL),
+-    MX6SX_PAD_LCD1_DATA09__GPIO3_IO_10 | MUX_PAD_CTRL(NO_PAD_CTRL),
++#ifdef CONFIG_SITEC_S2
++    MX6SX_PAD_LCD1_DATA09__GPIO3_IO_10 | MUX_PAD_CTRL(NO_PAD_CTRL), // LED_E
++    MX6SX_PAD_GPIO1_IO08__GPIO1_IO_8 | MUX_PAD_CTRL(NO_PAD_CTRL), // CAN Terminate
++    MX6SX_PAD_GPIO1_IO02__GPIO1_IO_2 | MUX_PAD_CTRL(NO_PAD_CTRL), // CAN Standby
++    MX6SX_PAD_KEY_COL2__GPIO2_IO_12 | MUX_PAD_CTRL(NO_PAD_CTRL), // 5PE
++#endif // CONFIG_SITEC_S2
+ };
+ 
+ static void setup_gpio(void)
+@@ -321,7 +326,12 @@ static void setup_gpio(void)
+     imx_iomux_v3_setup_multiple_pads(gpio_pads, ARRAY_SIZE(gpio_pads));
+ 
+     gpio_direction_output(IMX_GPIO_NR(3, 20), 1);
++#ifdef CONFIG_SITEC_S2
+     gpio_direction_output(IMX_GPIO_NR(3, 10), 1);
++    gpio_direction_output(IMX_GPIO_NR(1, 8), 1);
++    gpio_direction_output(IMX_GPIO_NR(1, 2), 0);
++    gpio_direction_output(IMX_GPIO_NR(2, 12), 1);
++#endif // CONFIG_SITEC_S2
+ }
+ 
+ #ifdef CONFIG_PFUZE100_PMIC_I2C
+@@ -556,6 +566,12 @@ int board_init(void)
+     printf("Hello World from SD Card\n");
+ #endif
+ 
++#ifdef CONFIG_SITEC_S2
++    printf("Hello World from S2\n");
++#else
++    printf("Hello World from another device\n");
++#endif
++
+     setup_gpmi_nand();
+     setup_gpio();
+     return 0;
+-- 
+1.9.1
+

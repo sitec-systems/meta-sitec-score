@@ -1,0 +1,14 @@
+This file contains a list of maintainers for the meta-sitec-score layer.
+
+Description of section entries:
+
+			M: Mail patches to: FullName <address@domain>
+			F: Files and directories with wildcard patterns.
+
+Please keep this list in alphabetical order.
+
+Maintainers List
+
+COMMON
+M:		Robert Lehmann <robert.lehmann@sitec-systems.de>
+F: 		*

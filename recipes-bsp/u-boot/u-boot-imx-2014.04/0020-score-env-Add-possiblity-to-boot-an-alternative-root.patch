@@ -1,0 +1,41 @@
+From 0e0b9aea9f9c3aa05504ec15c24f2c6f258e3598 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 3 Mar 2016 10:59:10 +0100
+Subject: [PATCH] score: env: Add possiblity to boot an alternative rootfs
+
+Extend the u-boot environment to the possibility to boot an alternative
+rootfs. The process is triggered by the environment variable root_alt.
+This variable can be setted from the linux userspace with the help of
+the fw-utils.
+
+Ticket #997
+---
+ include/configs/mx6sxscore.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/include/configs/mx6sxscore.h b/include/configs/mx6sxscore.h
+index 30fb45d..96dc728 100644
+--- a/include/configs/mx6sxscore.h
++++ b/include/configs/mx6sxscore.h
+@@ -172,12 +172,16 @@
+     "update_nor=fatload mmc 1:1 ${loadaddr} u-boot.imx && sf probe && sf erase 0x0 0x60000 && sf write ${loadaddr} 0x400 0x60000\0"
+ 
+ #define CONFIG_BOOT_KERNEL_ROOTFS_NAND \
+-    "rootnand=ubi0:rootfs rootfstype=ubifs\0"\
++    "getrootname=if test $root_alt -eq 0; then setenv rootname rootfs; else; setenv rootname rootfs_alt; fi;\0" \
++    "setrootnand=setenv rootnand ubi0:${rootname} rootfstype=ubifs\0" \
++    "root_alt=0\0" \
+     "nandkernel=nand read ${loadaddr} 0x80000 0x800000\0" \
+     "nandfdt=nand read ${fdt_addr} 0x880000 0x100000\0" \
+     "nandargs=setenv bootargs " \
+         "console=${console},${baudrate} uart_from_osc ubi.mtd=5 root=${rootnand} mtdparts=${mtdparts}\0" \
+-    "bootnand=run nandargs && " \
++    "bootnand=run getrootname && " \
++        "run setrootnand && " \
++        "run nandargs && " \
+         "run nandfdt && " \
+         "run nandkernel && " \
+         "bootm ${loadaddr} - ${fdt_addr}\0"
+-- 
+1.9.1
+

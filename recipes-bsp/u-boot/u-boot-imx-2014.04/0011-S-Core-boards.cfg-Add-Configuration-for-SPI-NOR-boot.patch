@@ -1,0 +1,27 @@
+From 7bea0bb358309eb28c2bbc027641e248edbbdb89 Mon Sep 17 00:00:00 2001
+From: Robert Lehmann <robert.lehmann@sitec-systems.de>
+Date: Thu, 7 Jan 2016 17:13:03 +0100
+Subject: [PATCH 11/11] S Core: boards.cfg: Add Configuration for SPI-NOR boot
+
+Add configuration for compiling U-Boot for SPI-NOR boot.
+
+Ticket #871
+---
+ boards.cfg | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/boards.cfg b/boards.cfg
+index 2cc01e2..0395d77 100644
+--- a/boards.cfg
++++ b/boards.cfg
+@@ -367,6 +367,7 @@ Active  arm         armv7          mx6         freescale       mx6sx_19x19_arm2
+ Active  arm         armv7          mx6         freescale       mx6sx_19x19_arm2  mx6sx_19x19_lpddr2_arm2       mx6sx_19x19_arm2:IMX_CONFIG=board/freescale/mx6sx_19x19_arm2/imximage_lpddr2.cfg,MX6SX,LPDDR2,DEFAULT_FDT_FILE="imx6sx-19x19-arm2.dtb"                                                                 Fabio Estevam <fabio.estevam@freescale.com>
+ Active  arm         armv7          mx6         freescale       mx6sx_19x19_arm2  mx6sx_19x19_lpddr2_arm2_qspi2       mx6sx_19x19_arm2:IMX_CONFIG=board/freescale/mx6sx_19x19_arm2/imximage_lpddr2.cfg,MX6SX,LPDDR2,DEFAULT_FDT_FILE="imx6sx-19x19-arm2.dtb",SYS_BOOT_QSPI
+ Active  arm         armv7          mx6         freescale       mx6sxscore       mx6sxscore                        mx6sxscore:IMX_CONFIG=board/freescale/mx6sxscore/imximage.cfg,MX6SX                                                               Robert Lehmann <robert.lehmann@sitec-systems.de>
++Active  arm         armv7          mx6         freescale       mx6sxscore       mx6sxscore_spi                        mx6sxscore:IMX_CONFIG=board/freescale/mx6sxscore/imximage.cfg,MX6SX,SYS_BOOT_SPINOR                                                               Robert Lehmann <robert.lehmann@sitec-systems.de>
+ Active  arm         armv7          mx6         freescale       mx6sxsabresd     mx6sxsabresd                         mx6sxsabresd:IMX_CONFIG=board/freescale/mx6sxsabresd/imximage.cfg,MX6SX                                                               Fabio Estevam <fabio.estevam@freescale.com>
+ Active  arm         armv7          mx6         freescale       mx6sxsabresd     mx6sxsabresd_qspi2                mx6sxsabresd:IMX_CONFIG=board/freescale/mx6sxsabresd/imximage.cfg,MX6SX,SYS_BOOT_QSPI                                                               Fabio Estevam <fabio.estevam@freescale.com>
+ Active  arm         armv7          mx6         freescale       mx6sxsabresd     mx6sxsabresd_m4fastup          mx6sxsabresd:IMX_CONFIG=board/freescale/mx6sxsabresd/imximage.cfg,MX6SX,SYS_BOOT_QSPI,SYS_AUXCORE_FASTUP                            Fabio Estevam <fabio.estevam@freescale.com>
+-- 
+1.9.1
+
