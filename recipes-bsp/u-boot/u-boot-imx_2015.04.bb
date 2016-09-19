@@ -14,7 +14,7 @@ UBOOT_SRC ?= "git://git.freescale.com/imx/uboot-imx.git;protocol=git"
 SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-PR="r2"
+PR="r3"
 LOCALVERSION = "-${PR}"
 
 S = "${WORKDIR}/git"
@@ -28,4 +28,6 @@ SRC_URI += "file://0003-board-score-Add-methode-for-getting-the-cs-of-spi.patch"
 SRC_URI += "file://0004-config-score_defconfig-Add-option-for-SPINOR.patch"
 SRC_URI += "file://0005-include-configs-score-Cleaning-Up.patch"
 SRC_URI += "file://0006-tools-env-env_flags-Add-ARRAY_SIZE-macro.patch"
+SRC_URI += "file://0007-board-score-Add-init-avail.-SD-interface.patch"
+SRC_URI += "file://0008-configs-score-Add-update_nor-from-sd2.patch"
 
