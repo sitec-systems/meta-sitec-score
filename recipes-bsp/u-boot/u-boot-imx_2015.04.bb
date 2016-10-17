@@ -14,7 +14,7 @@ UBOOT_SRC ?= "git://git.freescale.com/imx/uboot-imx.git;protocol=git"
 SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-PR="r3"
+PR="r4"
 LOCALVERSION = "-${PR}"
 
 S = "${WORKDIR}/git"
@@ -30,4 +30,7 @@ SRC_URI += "file://0005-include-configs-score-Cleaning-Up.patch"
 SRC_URI += "file://0006-tools-env-env_flags-Add-ARRAY_SIZE-macro.patch"
 SRC_URI += "file://0007-board-score-Add-init-avail.-SD-interface.patch"
 SRC_URI += "file://0008-configs-score-Add-update_nor-from-sd2.patch"
-
+SRC_URI += "file://0009-configs-score-Add-command-to-boot-from-sd2-and-sd3.patch"
+SRC_URI += "file://0010-configs-score-Rename-update_nor-command.patch"
+SRC_URI += "file://0011-configs-score-Change-filenames-for-dtbs.patch"
+SRC_URI += "file://0012-configs-score-Correct-name-for-eval-board-dtb-file.patch"
