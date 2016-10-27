@@ -12,7 +12,7 @@ DEPENDS += "lzop-native bc-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 LOCALVERSION = "-1.0.0"
-PR = "r4"
+PR = "r5"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV = "a4d2a08f3bfc57ff5d7d1307fb23f52f1e681aca"
@@ -37,7 +37,7 @@ SRC_URI += "file://1011-mach-imx6sx-Add-init-for-lan-power-enable-pin.patch"
 SRC_URI += "file://1012-imx6sx-pinfunc-Add-SION-bit-for-ENET2-Ref-Clock.patch"
 SRC_URI += "file://1013-imx6sx-score.dtsi-Change-the-ref-clk.patch"
 SRC_URI += "file://1014-clk-imx6sx-Change-clk-root-for-ENET.patch"
-
+SRC_URI += "file://1015-misc-tja1145-Extend-control-possibilites.patch"
 SRC_URI += "file://defconfig"
 
 DEFAULT_PREFERENCE = "1"
