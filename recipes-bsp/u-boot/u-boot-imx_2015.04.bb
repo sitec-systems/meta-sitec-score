@@ -10,14 +10,16 @@ LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a
 
 SRCBRANCH = "imx_v2015.04_4.1.15_1.0.0_ga"
 SRCREV = "d7d7c4312b71dd3879fa8640b23f6a5bac30e303"
-UBOOT_SRC ?= "git://git.freescale.com/imx/uboot-imx.git;protocol=git"
-SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
+UBOOT_SRC ?= "git://git.denx.de/u-boot-imx.git;protocol=git"
+#SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
+SRC_URI = "http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/snapshot/rel_imx_4.1.15_1.0.0_ga.tar.bz2"
+SRC_URI[md5sum] = "15f9ed70c501d63383e94c5dac37ed8b"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-PR="r4"
+PR="r5"
 LOCALVERSION = "-${PR}"
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/rel_imx_4.1.15_1.0.0_ga"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(mx6|mx6ul|mx7)"
@@ -34,3 +36,4 @@ SRC_URI += "file://0009-configs-score-Add-command-to-boot-from-sd2-and-sd3.patch
 SRC_URI += "file://0010-configs-score-Rename-update_nor-command.patch"
 SRC_URI += "file://0011-configs-score-Change-filenames-for-dtbs.patch"
 SRC_URI += "file://0012-configs-score-Correct-name-for-eval-board-dtb-file.patch"
+SRC_URI += "file://0013-configs-score-Add-environment-for-mfgboot.patch"
