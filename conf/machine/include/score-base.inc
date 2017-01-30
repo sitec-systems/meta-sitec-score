@@ -6,9 +6,11 @@ KERNEL_IMAGETYPE = "uImage"
 
 UBOOT_CONFIG[score] = "score_config"
 
-IMAGE_FSTYPES += "ubifs"
-MKUBIFS_ARGS = " --min-io-size 4096 --leb-size 253952 --max-leb-cnt 1660"
-UBINIZE_ARGS = " --min-io-size 4096 --peb-size 262144 --sub-page-size 4096"
+IMAGE_FSTYPES += "tar.bz2"
+#MKUBIFS_ARGS = " --min-io-size 4096 --leb-size 253952 --max-leb-cnt 1660"
+#UBINIZE_ARGS = " --min-io-size 4096 --peb-size 262144 --sub-page-size 4096"
+#MKUBIFS_ARGS = " --min-io-size 2048 --leb-size 126976 --max-leb-cnt 3925"
+#UBINIZE_ARGS = " --min-io-size 2048 --peb-size 131072 --sub-page-size 4096"
 
 # [   96.267406] UBI: scanning is finished
 # [   96.271387] UBI: empty MTD device detected
