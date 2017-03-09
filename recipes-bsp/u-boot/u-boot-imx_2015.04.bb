@@ -16,7 +16,7 @@ SRC_URI = "http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/snapshot/rel_
 SRC_URI[md5sum] = "15f9ed70c501d63383e94c5dac37ed8b"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-PR="r6"
+PR="r7"
 LOCALVERSION = "-${PR}"
 
 S = "${WORKDIR}/rel_imx_4.1.15_1.0.0_ga"
@@ -40,3 +40,6 @@ SRC_URI += "file://0013-configs-score-Add-environment-for-mfgboot.patch"
 SRC_URI += "file://0014-configs-score-Add-configuration-for-pca953x-port-exp.patch"
 SRC_URI += "file://0015-board-score-Add-intit-for-pca953x.patch"
 SRC_URI += "file://0016-configs-score-Change-bootcmd-for-mfg-boot.patch"
+SRC_URI += "file://0017-configs-mx6_common-Define-CONFIG_SYS_BOOTM_LEN.patch"
+SRC_URI += "file://0018-board-score-Add-i2cbus-2-and-remove-unused.patch"
+SRC_URI += "file://0019-configs-score-Add-scripts-for-mfg-boot.patch"
