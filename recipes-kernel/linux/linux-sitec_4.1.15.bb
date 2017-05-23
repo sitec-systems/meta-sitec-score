@@ -12,7 +12,7 @@ DEPENDS += "lzop-native bc-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 LOCALVERSION = "-1.0.0"
-PR = "r9"
+PR = "r10"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV = "a4d2a08f3bfc57ff5d7d1307fb23f52f1e681aca"
@@ -65,6 +65,7 @@ SRC_URI += "file://9012-imx6sx-s4-Change-device-tree-for-new-hardware-revisi.pat
 SRC_URI += "file://9013-imx6sx-s4-Change-information-for-SPI-devices.patch"
 SRC_URI += "file://9014-imx6sx-s4-Add-fully-support-for-rev-A1.patch"
 SRC_URI += "file://9015-imx6sx-s4-Add-pinmux-settings-for-OTG-ID-pin.patch"
+SRC_URI += "file://9016-imx6sx-s4-Change-settings-for-external-i2c.patch"
 
 SRC_URI += "file://defconfig"
 
