@@ -16,7 +16,7 @@ PR = "r10"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV = "a4d2a08f3bfc57ff5d7d1307fb23f52f1e681aca"
-KERNEL_SRC ?= "git://git.freescale.com/imx/linux-2.6-imx.git;protocol=git"
+KERNEL_SRC ?= "git://github.com/sitec-systems/linux-sitec.git;protocol=git"
 
 SRC_URI = "${KERNEL_SRC};branch=${SRCBRANCH}"
 SRC_URI += "file://gcc6_integrate_fix.patch"
