@@ -11,8 +11,8 @@ require recipes-kernel/linux/linux-dtb.inc
 DEPENDS += "lzop-native bc-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-LOCALVERSION = "-1.0.0"
-PR = "r10"
+LOCALVERSION = "-1.1.0"
+PR = "r11"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV = "a4d2a08f3bfc57ff5d7d1307fb23f52f1e681aca"
@@ -66,9 +66,16 @@ SRC_URI += "file://9013-imx6sx-s4-Change-information-for-SPI-devices.patch"
 SRC_URI += "file://9014-imx6sx-s4-Add-fully-support-for-rev-A1.patch"
 SRC_URI += "file://9015-imx6sx-s4-Add-pinmux-settings-for-OTG-ID-pin.patch"
 SRC_URI += "file://9016-imx6sx-s4-Change-settings-for-external-i2c.patch"
+SRC_URI += "file://9017-imx6sx-s4-Change-settings-for-USB1.patch"
+SRC_URI += "file://9018-imx6sx-s4-Add-support-for-onewire.patch"
 
 SRC_URI += "file://defconfig"
 
 DEFAULT_PREFERENCE = "1"
 
 COMPATIBLE_MACHINE = "(mx6)"
+
+pkg_postinst_kernel-image_append() {
+    flash_erase /dev/mtd1 0 0
+    nandwrite -p /dev/mtd1 $(readlink /boot/uImage)
+}
