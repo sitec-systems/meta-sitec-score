@@ -12,7 +12,7 @@ DEPENDS += "lzop-native bc-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 LOCALVERSION = "-1.1.0"
-PR = "r11"
+PR = "r12"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV = "a4d2a08f3bfc57ff5d7d1307fb23f52f1e681aca"
@@ -49,6 +49,8 @@ SRC_URI += "file://1023-mach-imx6sx-Change-init-routine-of-GPIOs-for-S4-hard.pat
 SRC_URI += "file://1024-mach-imx6sx-Remove-CAN2_Wake-from-export.patch"
 SRC_URI += "file://1025-drivers-tja1145-Change-ID-value.patch"
 SRC_URI += "file://1026-mach-imx6sx-Change-IO-State-add-init-of-the-kernel.patch"
+SRC_URI += "file://1027-ti-ads8688-Initial-commit-of-driver.patch"
+SRC_URI += "file://1028-mach-imx6sx-Add-init-of-fc-gpios.patch"
 SRC_URI += "file://9000-dts-imx6sx-s4-Initial-commit.patch"
 SRC_URI += "file://9001-dts-imx6sx-s4-Add-pin-muxing-for-K-Line-control-line.patch"
 SRC_URI += "file://9002-dts-imx6sx-s4-Add-base-for-I2C-io-expander.patch"
@@ -68,6 +70,7 @@ SRC_URI += "file://9015-imx6sx-s4-Add-pinmux-settings-for-OTG-ID-pin.patch"
 SRC_URI += "file://9016-imx6sx-s4-Change-settings-for-external-i2c.patch"
 SRC_URI += "file://9017-imx6sx-s4-Change-settings-for-USB1.patch"
 SRC_URI += "file://9018-imx6sx-s4-Add-support-for-onewire.patch"
+SRC_URI += "file://9019-imx6sx-s4-Add-FC-IO-Expander-and-ADC.patch"
 
 SRC_URI += "file://defconfig"
 
