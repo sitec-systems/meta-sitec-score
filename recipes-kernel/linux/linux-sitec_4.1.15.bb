@@ -7,12 +7,13 @@ i.MX Family Reference Boards. It includes support for many IPs such as GPU, VPU 
 
 require recipes-kernel/linux/linux-imx.inc
 require recipes-kernel/linux/linux-dtb.inc
+require recipes-kernel/linux/sitec-kernel-revision.inc
 
 DEPENDS += "lzop-native bc-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 LOCALVERSION = "-1.1.0"
-PR = "r12"
+PR = "${SITEC_KERNEL_REVISION}"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV = "a4d2a08f3bfc57ff5d7d1307fb23f52f1e681aca"
