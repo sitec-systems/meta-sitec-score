@@ -57,6 +57,7 @@ SRC_URI += "file://1030-gpio-export-Initial-commit-of-gpio-export-driver.patch"
 SRC_URI += "file://1031-can-mcp2517fd-Add-driver-for-mcp2517fd.patch"
 SRC_URI += "file://1032-can-Add-mcp2517fd-to-buildsystem-of-the-kernel.patch"
 SRC_URI += "file://1033-net-phy-Add-driver-for-tja110x.patch"
+SRC_URI += "file://1034-net-phy-tja110x-Updating-driver-and-add-RMII-mode.patch"
 
 SRC_URI += "file://9000-dts-imx6sx-s4-Initial-commit.patch"
 SRC_URI += "file://9001-dts-imx6sx-s4-Add-pin-muxing-for-K-Line-control-line.patch"
