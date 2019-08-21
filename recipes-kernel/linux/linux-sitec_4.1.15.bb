@@ -84,6 +84,7 @@ SRC_URI += "file://9020-dts-imx6sx-s4-Remove-fc-specific-code.patch"
 SRC_URI += "file://9021-dts-imx6sx-s4-Add-pinmuxing-for-s4-to-dts.patch"
 SRC_URI += "file://9022-mach-imx6sx-Remove-gpio-init-from-c-file.patch"
 SRC_URI += "file://9023-imx6sx-s4-Setting-max-freq-for-wlan-mmc-to-20-MHz.patch"
+SRC_URI += "file://9024-imx6sx-s4-Changing-pinmuxing-for-mmc3-pins.patch"
 SRC_URI += "file://defconfig"
 
 DEFAULT_PREFERENCE = "1"
