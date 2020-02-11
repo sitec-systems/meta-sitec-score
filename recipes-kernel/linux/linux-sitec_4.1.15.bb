@@ -63,6 +63,7 @@ SRC_URI += "file://1036-net-phy-tja110x-Adding-reduced-drive-strength-option.pat
 SRC_URI += "file://1037-net-phy-tja110x-Remove-auto-power-manangement-option.patch"
 SRC_URI += "file://1040-phy-tja100-Reduce-TX-Amplitude-to-lowest-value.patch"
 SRC_URI += "file://1041-phy-tja110x-Enable-auto-pwd-mode.patch"
+SRC_URI += "file://1042-Adding-devicetree-for-imx6sx-s4-a4300.patch"
 
 SRC_URI += "file://9000-dts-imx6sx-s4-Initial-commit.patch"
 SRC_URI += "file://9001-dts-imx6sx-s4-Add-pin-muxing-for-K-Line-control-line.patch"
