@@ -16,7 +16,7 @@ SRC_URI = "http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/snapshot/rel_
 SRC_URI[md5sum] = "15f9ed70c501d63383e94c5dac37ed8b"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-PR="r10"
+PR="r11"
 LOCALVERSION = "-${PR}"
 
 S = "${WORKDIR}/rel_imx_4.1.15_1.0.0_ga"
@@ -46,3 +46,4 @@ SRC_URI += "file://0019-configs-score-Add-scripts-for-mfg-boot.patch"
 SRC_URI += "file://0020-score-Add-support-for-macronix-nor-flashes.patch"
 SRC_URI += "file://0021-configs-score-Add-autoflash-in-usb-boot-mode.patch"
 SRC_URI += "file://0022-score-activate-pmic-voltage-vgen4-at-bootup.patch"
+SRC_URI += "file://0023-configs-score-Change-default-boot-to-usb-boot.patch"
