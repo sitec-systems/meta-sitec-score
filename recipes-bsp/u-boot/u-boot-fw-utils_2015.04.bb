@@ -10,12 +10,9 @@ DEPENDS = "mtd-utils"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/u-boot-imx:"
 
-SRCBRANCH = "imx_v2015.04_4.1.15_1.0.0_ga"
-SRCREV = "d7d7c4312b71dd3879fa8640b23f6a5bac30e303"
-UBOOT_SRC ?= "git://git.freescale.com/imx/uboot-imx.git;protocol=git"
-#SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
-SRC_URI = "http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/snapshot/rel_imx_4.1.15_1.0.0_ga.tar.bz2"
-SRC_URI[md5sum] = "15f9ed70c501d63383e94c5dac37ed8b"
+SRCBRANCH = "nxp/imx_v2015.04_4.1.15_1.0.0_ga"
+SRCREV = "384e1c1f527d732a863cef360f5da419a728b1d5"
+SRC_URI = "git://source.codeaurora.org/external/imx/uboot-imx;protocol=https;branch=${SRCBRANCH}"
 
 SRC_URI += "file://fw_env.config"
 SRC_URI += "file://0001-score-Add-board-score.patch"
@@ -25,9 +22,9 @@ SRC_URI += "file://0004-config-score_defconfig-Add-option-for-SPINOR.patch"
 SRC_URI += "file://0005-include-configs-score-Cleaning-Up.patch"
 SRC_URI += "file://0006-tools-env-env_flags-Add-ARRAY_SIZE-macro.patch"
 
-S = "${WORKDIR}/rel_imx_4.1.15_1.0.0_ga"
+S = "${WORKDIR}/git"
 
-PR = "r0"
+PR = "r1"
 
 inherit uboot-config
 
